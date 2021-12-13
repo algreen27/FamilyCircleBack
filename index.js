@@ -2,10 +2,10 @@ const connectDB = require('./startup/db');
 const express = require('express');
 const app = express();
 const users = require('./routes/users');
-const posts = require('./routes/posts');
-const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+// const posts = require('./routes/posts');
+// const cors = require('cors');
+// const fs = require('fs');
+// const path = require('path');
 
 connectDB();
 
