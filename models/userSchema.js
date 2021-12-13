@@ -17,8 +17,7 @@ const userSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 255,
   },
-  dob: { type: Date, required: false },
-  christmasPreference: { type: String, required: false },
+  // dob: { type: Date, required: false },
   friends: { type: [friendsSchema], default: [] },
   posts: { type: [postSchema], default: [] },
   password: { type: String, required: true, maxlength: 200, minlength: 5 },
@@ -30,19 +29,19 @@ const userSchema = new mongoose.Schema({
 });
 
 
-userSchema.methods.generateAuthToken = function () {
-  return jwt.sign({
-    firstName: this.firstName,
-    lastName: this.lastName,
-    email: this.email,
-    dob: this.dob,
-    christmasPreference: this.christmanPreference,
-    password: this.password,
-    isAdmin: this.isAdmin,
-    image: this.image,
-  },
-  config.get("jwtsecret"));
-};
+// userSchema.methods.generateAuthToken = function () {
+//   return jwt.sign({
+//     firstName: this.firstName,
+//     lastName: this.lastName,
+//     email: this.email,
+//     dob: this.dob,
+//     christmasPreference: this.christmanPreference,
+//     password: this.password,
+//     isAdmin: this.isAdmin,
+//     image: this.image,
+//   },
+//   config.get("jwtsecret"));
+// };
 
 const User = mongoose.model("User", userSchema);
 
@@ -53,7 +52,6 @@ function validateUser(user) {
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(1024).required(),
     dob: Joi.date().required(),
-    christmasPreference: Joi.string().required().allow("snowman", "tree"),
     image: Joi.string(),
   });
   return schema.validate(user);
