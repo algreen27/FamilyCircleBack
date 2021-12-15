@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-const { Post, postSchema } = require("./postSchema");
+const { Post, postSchema } = require("./post");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 

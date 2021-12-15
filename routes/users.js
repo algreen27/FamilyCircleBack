@@ -2,6 +2,7 @@ const { User, validateUser } = require("../models/user");
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const auth = require('../middleware/auth');
 
 router.post("/", async (req, res) => {
   try {
@@ -33,5 +34,27 @@ router.post("/", async (req, res) => {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
+
+router.post("/:id/posts", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user)
+      return res
+        .status(400)
+        .send(`The user with id "${req.params.id}" does not exist.`);
+
+    const post = new Post({
+      // description: req.body.description,
+      // likes: 0,
+    });
+    if (!post) return res.status(400).send(`Reply doesnt exist.`);
+    user.posts.push(post);
+    await user.save();
+    return res.send(post);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
 
 module.exports = router;
