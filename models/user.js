@@ -16,24 +16,25 @@ const userSchema = new mongoose.Schema({
   dob: { type: Date, required: false },
   // message: { type: [postSchema], default: [] },
   // password: { type: String, required: true, minlength: 5, maxlength: 200 },
-  aboutMe: { type: String, minlength: 5, maxlength: 1024 },
-  linkRequests: [],
+  // aboutMe: { type: String, minlength: 5, maxlength: 1024 },
+  // linkRequests: [],
   image: {type: String, default:""}
+  // parents: {type: [parentSchema], default: []}
 });
 
 const User = mongoose.model("User", userSchema);
 
-// function validateUser(user) {
-//   const schema = Joi.object({
-//     firstName: Joi.string().min(2).max(50).required(),
-//     lastName: Joi.string().min(2).max(50).required(),
-//     email: Joi.string().min(5).max(255).required().email(),
-//     password: Joi.string().min(5).max(1024).required(),
-//     dob: Joi.date().required(),
-//     image: Joi.string(),
-//   });
-//   return schema.validate(user);
-// }
+function validateUser(user) {
+  const schema = Joi.object({
+    firstName: Joi.string().min(2).max(20).required(),
+    lastName: Joi.string().min(2).max(30).required(),
+    email: Joi.string().min(5).max(255).required().email(),
+    // password: Joi.string().min(5).max(1024).required(),
+    dob: Joi.date(),
+    image: Joi.string(),
+  });
+  return schema.validate(user);
+}
 
 // const validateLogin = (req) => {
 //   const schema = Joi.object({
