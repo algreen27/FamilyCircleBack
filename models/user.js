@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const { Post, postSchema } = require("./postSchema");
-
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true, minlength: 2, maxlength: 20 },
@@ -15,12 +16,16 @@ const userSchema = new mongoose.Schema({
   },
   dob: { type: Date, required: false },
   // message: { type: [postSchema], default: [] },
-  // password: { type: String, required: true, minlength: 5, maxlength: 200 },
+  password: { type: String, required: true, minlength: 5, maxlength: 200 },
   // aboutMe: { type: String, minlength: 5, maxlength: 1024 },
   // linkRequests: [],
-  image: {type: String, default:""}
+  image: { type: String, default: "" },
   // parents: {type: [parentSchema], default: []}
 });
+
+userSchema.methods.generateAuthToken = function () {
+  return jwt.sign({ _id: this._id, name: this.name }, config.get("jwtSecret"));
+};
 
 const User = mongoose.model("User", userSchema);
 
@@ -29,7 +34,7 @@ function validateUser(user) {
     firstName: Joi.string().min(2).max(20).required(),
     lastName: Joi.string().min(2).max(30).required(),
     email: Joi.string().min(5).max(255).required().email(),
-    // password: Joi.string().min(5).max(1024).required(),
+    password: Joi.string().min(5).max(1024).required(),
     dob: Joi.date(),
     image: Joi.string(),
   });
@@ -45,5 +50,5 @@ function validateUser(user) {
 // };
 
 exports.User = User;
-// exports.validateUser = validateUser;
+exports.validateUser = validateUser;
 // exports.validateLogin = validateLogin;
