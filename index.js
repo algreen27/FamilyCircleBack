@@ -13,6 +13,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use('/api/users', users);
+app.use('/api/auth', auth);
 
 // app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
