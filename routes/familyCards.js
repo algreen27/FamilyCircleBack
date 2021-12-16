@@ -7,7 +7,7 @@ const {
 const express = require("express");
 const router = express.Router();
 
-router.post("/addchild", async (req, res) => {
+router.post("/child", async (req, res) => {
   try {
     const { error } = validateChild(req.body);
     if (error) return res.status(400).send(error);
@@ -18,8 +18,6 @@ router.post("/addchild", async (req, res) => {
     });
 
 
-    // if (!post) return res.status(400).send(`Reply doesnt exist.`);
-    // user.posts.push(post);
     await child.save();
     return res.send(child);
   } catch (ex) {
@@ -27,7 +25,7 @@ router.post("/addchild", async (req, res) => {
   }
 });
 
-router.post("/addparent", async (req, res) => {
+router.post("/parent", async (req, res) => {
   try {
     const { error } = validateParent(req.body);
     if (error) return res.status(400).send(error);

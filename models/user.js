@@ -49,14 +49,14 @@ function validateUser(user) {
   return schema.validate(user);
 }
 
-// const validateLogin = (req) => {
-//   const schema = Joi.object({
-//     email: Joi.string().min(5).max(255).required().email(),
-//     password: Joi.string().min(5).max(1024).required(),
-//   });
-//   return schema.validate(req);
-// };
+const validateLogin = (req) => {
+  const schema = Joi.object({
+    email: Joi.string().min(5).max(255).required().email(),
+    password: Joi.string().min(5).max(1024).required(),
+  });
+  return schema.validate(req);
+};
 
 exports.User = User;
 exports.validateUser = validateUser;
-// exports.validateLogin = validateLogin;
+exports.validateLogin = validateLogin;

@@ -1,9 +1,12 @@
-const { User, validateUser } = require("../models/user");
+const { User, validateUser, validateLogin } = require("../models/user");
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
+const fileUpload = require("../middleware/fileUpload");
 
+//create new user/register
+// router.post("/", fileUpload.single("image"), async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { error } = validateUser(req.body);
@@ -29,7 +32,44 @@ router.post("/", async (req, res) => {
     return res
       .header("x-auth-token", token)
       .header("access-control-expose-headers", "x-auth-token")
-      .send({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email });
+      .send({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        // image: user.image,
+      });
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+//logih users
+router.post("/login", async (req, res) => {
+  try {
+    const { error } = validateLogin(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let user = await User.findOne({ email: req.body.email });
+    if (!user) return res.status(400).send(`Invalid email or password.`);
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword)
+      return res.status(400).send("Invalid email or password.");
+
+    const token = jwt.sign(
+      {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        id: user._id
+      },
+      config.get("jwtsecret")
+    );
+    return res.send(token);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
@@ -55,6 +95,5 @@ router.post("/:id/posts", auth, async (req, res) => {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
-
 
 module.exports = router;
