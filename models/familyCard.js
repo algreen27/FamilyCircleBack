@@ -45,6 +45,7 @@ function validateParent(parent) {
       lastName: Joi.string().required(),
     });
     return schema.validate(parent);
+};
 
 function validateChild(child) {
     const schema = Joi.object({
@@ -52,6 +53,7 @@ function validateChild(child) {
       lastName: Joi.string().required(),
     });
     return schema.validate(child);
+};
 
 
 exports.Parent = Parent;
@@ -59,4 +61,3 @@ exports.Child = Child;
 exports.Relation = Relation;
 exports.validateChild = validateChild;
 exports.validateParent = validateParent;
-
