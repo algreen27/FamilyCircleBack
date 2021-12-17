@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 255,
   },
-  dob: { type: Date, required: false },
+  // dob: { type: Date, required: false },
   // message: { type: [postSchema], default: [] },
   password: { type: String, required: true, minlength: 5, maxlength: 200 },
   // aboutMe: { type: String, minlength: 5, maxlength: 1024 },
@@ -29,7 +29,8 @@ userSchema.methods.generateAuthToken = function () {
       _id: this._id,
       firstname: this.firstName,
       lastName: this.lastName,
-      image: this.image,
+      email: this.email,
+      // image: this.image,
     },
     config.get("jwtSecret")
   );
@@ -43,8 +44,8 @@ function validateUser(user) {
     lastName: Joi.string().min(2).max(30).required(),
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(1024).required(),
-    dob: Joi.date(),
-    image: Joi.string(),
+    // dob: Joi.date(),
+    // image: Joi.string(),
   });
   return schema.validate(user);
 }
